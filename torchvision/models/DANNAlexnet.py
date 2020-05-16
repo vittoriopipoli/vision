@@ -11,7 +11,7 @@ model_urls = {
 }
 
 
-class AlexNet(nn.Module):
+class DANNAlexNet(nn.Module):
 
     def __init__(self, num_classes=1000):
         super(AlexNet, self).__init__()
