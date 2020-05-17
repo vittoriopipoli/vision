@@ -53,10 +53,10 @@ class AlexNet(nn.Module):
         gr_lambda = args[1]
         x = self.features(x)
         x = self.avgpool(x)
-        feature = torch.flatten(x, 1)
+        features = features.view(features.size(0), -1)
         reverse_feature = ReverseLayerF.apply(feature, gr_lambda)
         class_output = self.classifier(feature)
-        domain_output = self.classifier(reverse_feature)
+        domain_output = self.domain(reverse_feature)
         return class_output, domain_output
 
     # def forward(self, x):
@@ -79,5 +79,5 @@ def alexnet(pretrained=False, progress=True, **kwargs):
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls['alexnet'],
                                               progress=progress)
-        model.load_state_dict(state_dict)
+        model.load_state_dict(state_dict, strict=False)
     return model
