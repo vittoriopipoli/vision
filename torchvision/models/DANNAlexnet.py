@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from .utils import load_state_dict_from_url
-from gradient_reversal import ReverseLayerF
+from vision.torchvision.models.gradient_reversal import ReverseLayerF
 
 __all__ = ['AlexNet', 'alexnet']
 
@@ -49,8 +49,8 @@ class AlexNet(nn.Module):
         args = []
         for t in argv:
             args.append(t)
-        x = l[0]
-        gr_lambda = l[1]
+        x = args[0]
+        gr_lambda = args[1]
         x = self.features(x)
         x = self.avgpool(x)
         feature = torch.flatten(x, 1)
