@@ -59,6 +59,25 @@ class AlexNet(nn.Module):
         domain_output = self.domain(reverse_feature)
         return class_output, domain_output
 
+    # def forward(self, *argv): new
+    #     args = []
+    #     for t in argv:
+    #         args.append(t)
+    #     x = args[0]
+    #     gr_lambda = args[1]
+    #     flagClass = args[2]
+    #     x = self.features(x)
+    #     x = self.avgpool(x)
+    #     feature = torch.flatten(x, 1)
+    #     reverse_feature = ReverseLayerF.apply(feature, gr_lambda)
+    #     if flagClass == True:
+    #       class_output = self.classifier(feature)
+    #       return class_output
+    #     domain_output = self.domain(reverse_feature)
+    #     return domain_output
+
+
+
     # def forward(self, x):
     #     x = self.features(x)
     #     x = self.avgpool(x)
