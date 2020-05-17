@@ -46,11 +46,11 @@ class AlexNet(nn.Module):
             nn.Linear(4096, 2)
         )
 
-    def forward(self, x, alpha=1.0):
+    def forward(self, x, gr_lambda):
         x = self.features(x)
         x = self.avgpool(x)
         feature = torch.flatten(x, 1)
-        reverse_feature = ReverseLayerF.apply(feature, alpha)
+        reverse_feature = ReverseLayerF.apply(feature, gr_lambda)
         class_output = self.classifier(feature)
         domain_output = self.classifier(reverse_feature)
         return class_output, domain_output
