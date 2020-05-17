@@ -5,7 +5,6 @@ from gradient_reversal import ReverseLayerF
 
 __all__ = ['AlexNet', 'alexnet']
 
-
 model_urls = {
     'alexnet': 'https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth',
 }
@@ -46,7 +45,12 @@ class AlexNet(nn.Module):
             nn.Linear(4096, 2)
         )
 
-    def forward(self, x, gr_lambda):
+    def forward(self, *argv):
+        args = []
+        for t in argv:
+            args.append(t)
+        x = l[0]
+        gr_lambda = l[1]
         x = self.features(x)
         x = self.avgpool(x)
         feature = torch.flatten(x, 1)
@@ -77,5 +81,3 @@ def alexnet(pretrained=False, progress=True, **kwargs):
                                               progress=progress)
         model.load_state_dict(state_dict)
     return model
-
-
