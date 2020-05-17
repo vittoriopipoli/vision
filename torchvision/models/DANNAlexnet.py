@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from .utils import load_state_dict_from_url
-
+from gradient_reversal import ReverseLayerF
 
 __all__ = ['AlexNet', 'alexnet']
 
@@ -46,14 +46,21 @@ class AlexNet(nn.Module):
             nn.Linear(4096, 2)
         )
 
-    def forward(self, x):
+    def forward(self, x, alpha=1.0):
         x = self.features(x)
         x = self.avgpool(x)
-        x = torch.flatten(x, 1)
-        x = self.classifier(x)
-        return x
+        feature = torch.flatten(x, 1)
+        reverse_feature = ReverseLayerF.apply(feature, alpha)
+        class_output = self.classifier(feature)
+        domain_output = self.classifier(reverse_feature)
+        return class_output, domain_output
 
-
+    # def forward(self, x):
+    #     x = self.features(x)
+    #     x = self.avgpool(x)
+    #     x = torch.flatten(x, 1)
+    #     x = self.classifier(x)
+    #     return x
 
 
 def alexnet(pretrained=False, progress=True, **kwargs):
@@ -70,3 +77,5 @@ def alexnet(pretrained=False, progress=True, **kwargs):
                                               progress=progress)
         model.load_state_dict(state_dict)
     return model
+
+
