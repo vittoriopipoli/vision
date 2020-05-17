@@ -51,11 +51,11 @@ class AlexNet(nn.Module):
             args.append(t)
         x = args[0]
         gr_lambda = args[1]
-        x = self.features(x)
-        x = self.avgpool(x)
+        features = self.features(x)
+        # features = self.avgpool(features)
         features = features.view(features.size(0), -1)
-        reverse_feature = ReverseLayerF.apply(feature, gr_lambda)
-        class_output = self.classifier(feature)
+        reverse_feature = ReverseLayerF.apply(features, gr_lambda)
+        class_output = self.classifier(features)
         domain_output = self.domain(reverse_feature)
         return class_output, domain_output
 
