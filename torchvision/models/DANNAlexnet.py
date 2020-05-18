@@ -41,7 +41,11 @@ class AlexNet(nn.Module):
             nn.LogSoftmax(dim=1),
         )
         self.domain = nn.Sequential(
+            nn.Dropout(),
             nn.Linear(256 * 6 * 6, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
             nn.Linear(4096, 2),
             nn.LogSoftmax(dim=1),
