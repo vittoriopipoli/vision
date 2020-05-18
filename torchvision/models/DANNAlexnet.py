@@ -38,11 +38,13 @@ class AlexNet(nn.Module):
             nn.Linear(4096, 4096),
             nn.ReLU(inplace=True),
             nn.Linear(4096, num_classes),
+            nn.LogSoftmax(dim=1),
         )
         self.domain = nn.Sequential(
             nn.Linear(256 * 6 * 6, 4096),
             nn.ReLU(inplace=True),
-            nn.Linear(4096, 2)
+            nn.Linear(4096, 2),
+            nn.LogSoftmax(dim=1),
         )
 
     def forward(self, *argv):
@@ -51,32 +53,16 @@ class AlexNet(nn.Module):
             args.append(t)
         x = args[0]
         gr_lambda = args[1]
+        flagClass = args[2]
         x = self.features(x)
         x = self.avgpool(x)
         feature = torch.flatten(x, 1)
         reverse_feature = ReverseLayerF.apply(feature, gr_lambda)
-        class_output = self.classifier(feature)
+        if flagClass == True:
+          class_output = self.classifier(feature)
+          return class_output
         domain_output = self.domain(reverse_feature)
-        return class_output, domain_output
-
-    # def forward(self, *argv): new
-    #     args = []
-    #     for t in argv:
-    #         args.append(t)
-    #     x = args[0]
-    #     gr_lambda = args[1]
-    #     flagClass = args[2]
-    #     x = self.features(x)
-    #     x = self.avgpool(x)
-    #     feature = torch.flatten(x, 1)
-    #     reverse_feature = ReverseLayerF.apply(feature, gr_lambda)
-    #     if flagClass == True:
-    #       class_output = self.classifier(feature)
-    #       return class_output
-    #     domain_output = self.domain(reverse_feature)
-    #     return domain_output
-
-
+        return domain_output
 
     # def forward(self, x):
     #     x = self.features(x)
