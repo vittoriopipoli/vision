@@ -4,7 +4,7 @@ from .utils import load_state_dict_from_url
 from vision.torchvision.models.gradient_reversal import ReverseLayerF
 
 __all__ = ['AlexNet', 'alexnet']
-
+#sss
 model_urls = {
     'alexnet': 'https://download.pytorch.org/models/alexnet-owt-4df8aa71.pth',
 }
